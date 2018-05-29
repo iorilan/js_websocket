@@ -1,0 +1,53 @@
+<html>
+<body>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  
+<div>
+	<input type="text" id="txtMsg" /> <input type="button" id="btnSend" value="Send" />
+</div>
+
+<div id="msg">
+	
+</div>
+
+
+
+<script>
+	var socket ;
+	socket = new WebSocket("ws://localhost:8080");
+
+	//Open connection  handler.
+	socket.onopen = function() {
+		console.log("socket opened.");
+	};
+
+	//Message data handler.
+	socket.onmessage = function(e) {
+		//   debugger;
+		var html = $("#msg").html() + "<br/>"+e.data;
+		console.log(e.data);
+	   $("#msg").html(html);
+	};
+
+	//Close event handler.
+	socket.onclose = function() {
+		alert("socket connection closed.");
+	};
+
+	//Error event handler.
+	socket.onerror = function(e) {
+		alert(e.message);
+	}
+	
+	$("#btnSend").click(function(){
+		if($("#txtMsg").val() != ""){
+			socket.send($("#txtMsg").val());
+		}
+	});
+</script>
+
+</body>
+</html>
